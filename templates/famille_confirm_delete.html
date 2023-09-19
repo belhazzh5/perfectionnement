@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <title>Confirm Delete</title>
+
+    <h1>Confirm Delete</h1>
+    <p>Are you sure you want to delete "{{ famille.nom }} {{ famille.prenom }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, Delete">
+    </form>
+    <a href="{% url 'famille_list' %}">Cancel</a>
+    {% endblock content %}

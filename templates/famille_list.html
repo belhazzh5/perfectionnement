@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<title>Famille List</title>
+<div class="container mt-4">
+    <h1 class="mb-4">Famille List</h1>
+    <ul class="list-group">
+        {% for famille in familles %}
+            <li class="list-group-item">
+                <a href="{% url 'famille_update' famille.pk %}" class="btn btn-primary btn-sm">{{ famille.nom }} {{ famille.prenom }}</a> 
+                <a href="{% url 'famille_update' famille.pk %}" class="btn btn-warning btn-sm">Update</a>
+                <a href="{% url 'famille_delete' famille.pk %}" class="btn btn-danger btn-sm">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'famille_create' %}" class="btn btn-success mt-4">Create New Famille</a>
+</div>
+{% endblock content %}
