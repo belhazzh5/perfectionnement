@@ -9,21 +9,61 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm  # Import your custom form
-
+from django.db.models import Count
+from .models import Logs
 class FamilleListView(LoginRequiredMixin,ListView):
     model = Famille
-    template_name = 'famille_list.html'
+    template_name = 'fomrulaire/index.html'
     context_object_name = 'familles'
-    
-@login_required()
-def index(request):
-    return render(request,'fomrulaire/index.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Basic statistics
+        context['families'] = Famille.objects.all()
+        context['total_families'] = Famille.objects.count()
+        context['civil_status_counts'] = Famille.objects.values('etat_civil').annotate(count=Count('id'))
+        context['health_status_counts'] = Famille.objects.values('etat_santé').annotate(count=Count('id'))
+
+        # Filtered lists (example: families with more than 3 children)
+        context['families_with_many_children'] = Famille.objects.filter(nb_enfants_totales__gt=3)
+
+        # Recent activities (example: latest 5 additions)
+        context['recent_additions'] = Famille.objects.order_by('-creation_date')[:5]
+        enfants = 0
+        nb_enfants_handicapés = []
+        nb_enfants_scolaire = []
+        nb_enfants_chomeur = []
+        for famille in Famille.objects.all():
+            enfants += famille.nb_enfants_totales
+            nb_enfants_handicapés.append(famille.nb_enfants_handicapés)
+            nb_enfants_chomeur.append(famille.nb_enfants_chomeur)
+            nb_enfants_scolaire.append(famille.nb_enfants_scolaire)
+        context['enfants'] = int (enfants / Famille.objects.count())
+        context['nb_enfants_scolaire'] = nb_enfants_scolaire
+        context['nb_enfants_chomeur'] = nb_enfants_chomeur
+        context['nb_enfants_handicapés'] = nb_enfants_handicapés
+        # Static content
+        context['logs'] = Logs.objects.all()
+
+        return context
+        
 
 class FamilleCreateView(LoginRequiredMixin,CreateView):
     model = Famille
     form_class = FamilleForm
     template_name = 'famille_form.html'
     success_url = reverse_lazy('famille_list')
+    def form_valid(self, form):
+        # Save the Famille object
+        response = super().form_valid(form)
+
+        # Create a log entry for the Create operation
+        FamilleLog.objects.create(
+            description=f'${self.object} is created with ${self.request.user}',
+            user=self.request.user,
+        )
+
+
 
 class FamilleUpdateView(LoginRequiredMixin,UpdateView):
     model = Famille
@@ -37,7 +77,7 @@ class FamilleDeleteView(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy('famille_list')
 
 def dash(request):
-    return render(request,'fomrulaire/index.html')
+    return render(request,'famille_list.html')
 
 def register(request):
     if request.method == 'POST':

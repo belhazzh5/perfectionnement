@@ -42,7 +42,7 @@
         <header id="header" class="header fixed-top d-flex align-items-center">
       
           <div class="d-flex align-items-center justify-content-between">
-            <a href="{% url "index" %}" class="logo d-flex align-items-center">
+            <a href="{% url "famille_list" %}" class="logo d-flex align-items-center">
               <img src="{% static 'images/logo13.png' %}" alt="">
               <span class="d-none d-lg-block">Dashboard</span>
             </a>
@@ -210,20 +210,22 @@
       
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                   <img src="{% static 'assets/img/profile-img.jpg' %}" alt="Profile" class="rounded-circle">
-                  <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                  <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user.username}}</span>
                 </a><!-- End Profile Iamge Icon -->
       
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                   <li class="dropdown-header">
-                    <h6>Kevin Anderson</h6>
-                    <span>Web Designer</span>
+                    {% if request.user.email %}
+                    <h6>{{request.user.email}}</h6>
+                    {% endif %}
+                    <span>Admin</span>
                   </li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
       
                   <li>
-                    <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                    <a class="dropdown-item d-flex align-items-center" href="#">
                       <i class="bi bi-person"></i>
                       <span>My Profile</span>
                     </a>
@@ -233,7 +235,7 @@
                   </li>
       
                   <li>
-                    <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                    <a class="dropdown-item d-flex align-items-center" href="#">
                       <i class="bi bi-gear"></i>
                       <span>Account Settings</span>
                     </a>
@@ -243,7 +245,7 @@
                   </li>
       
                   <li>
-                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                    <a class="dropdown-item d-flex align-items-center" href="#">
                       <i class="bi bi-question-circle"></i>
                       <span>Need Help?</span>
                     </a>
@@ -273,23 +275,27 @@
           <ul class="sidebar-nav" id="sidebar-nav">
       
             <li class="nav-item">
-              <a class="nav-link " href="{% url "index" %}">
+              <a class="nav-link " href="{% url "famille_create" %}">
                 <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <span>Create Famille</span>
               </a>
             </li><!-- End Dashboard Nav -->
               <a class="nav-link collapsed" href="{% url "register" %}">
                 <i class="bi bi-card-list"></i>
-                <span>Register</span>
+                <span>Update Famille</span>
               </a>
             </li><!-- End Register Page Nav -->
+
       
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="{% url "login" %}">
-                <i class="bi bi-box-arrow-in-right"></i>
-                <span>Login</span>
-              </a>
-            </li><!-- End Login Page Nav -->
+      <ul class="list-group">
+        {% for familly in families %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <span> {{familly.nom|upper}}-{{familly.prenom|upper}}</span> 
+    <a href="{% url "famille_update" familly.pk %}"><span class="btn btn-primary ">update</span></a>
+    <a href="{% url "famille_delete" familly.id %}"><span class="btn btn-warning">delete</span></a>
+  </li>
+  {% endfor %}
+</ul>
       
             <li class="nav-item">
               <a class="nav-link collapsed" href="{% url "not-found" %}">

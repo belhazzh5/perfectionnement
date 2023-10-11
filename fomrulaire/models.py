@@ -1,6 +1,8 @@
 from django.db import models
 from django import forms
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
+
 # Create your models here.
 def is_number(value):
     return value.isnumeric()
@@ -9,6 +11,11 @@ phone_number_validator = RegexValidator(
     message='Phone number must contain only numeric digits.',
 )
 
+    
+class Logs(models.Model):
+    description = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 class Famille(models.Model):
     image = models.ImageField(upload_to="images/familles",blank=True, null=True)
@@ -42,10 +49,10 @@ class Famille(models.Model):
         blank=True,
         default='b',
     )
-    nb_enfants_scolaire = models.IntegerField(blank=True, null=True) 
-    nb_enfants_chomeur = models.IntegerField(blank=True, null=True) 
-    nb_enfants_handicapés = models.IntegerField(blank=True, null=True) 
-    nb_enfants_totales = models.IntegerField(blank=True, null=True) 
+    nb_enfants_scolaire = models.IntegerField(blank=True, null=True,default=0) 
+    nb_enfants_chomeur = models.IntegerField(blank=True, null=True,default=0) 
+    nb_enfants_handicapés = models.IntegerField(blank=True, null=True,default=0) 
+    nb_enfants_totales = models.IntegerField(blank=True, null=True,default=0) 
     comme_familles =  models.CharField(
         max_length=1,
         choices=FAMILLE,
@@ -84,4 +91,3 @@ class Famille(models.Model):
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
-    
