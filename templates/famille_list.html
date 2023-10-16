@@ -1,121 +1,50 @@
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>Home Page</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
-.w3-row-padding img {margin-bottom: 12px}
-.bgimg {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url("{% static '/images/profile_girl.jpg' %}");
-  min-height: 100%;
-}
-</style>
-</head>
-<body>
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+<div class="container">
+    <ul class="list-group">
+        {% for family in myFamily %}
+      <li class="list-group-item clearfix">
+        <img class="img-responsive img-rounded" src="{% static 'images/family.jpg' %}" alt=""/>
+        <h3 class="list-group-item-heading">
+          {{family.prenom}} {{family.nom}}
+        </h3>
+        <p class="list-group-item-text lead">
+          Cette Famille a {{family.nb_enfants_totales}} enfants , {{family.nb_enfants_scolaire}} scolaire et {{family.nb_enfants_chomeur}} chomeurs.
+          <br />
+        </p>
+        <div class="btn-toolbar pull-right" role="toolbar" aria-label="">
+          <div class="btn-group">
+            <ul class="dropdown-menu">
+              <li><a href="#">Add to new list</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">A list</a></li>
+              <li><a href="#">Another list</a></li>
+              <li><a href="#">Third list</a></li>
+            </ul>
+          </div>
+          <a href="{% url 'famille_update' family.id %}" class="btn btn-default">Update</a>
+          <a href="{% url 'famille_delete' family.id %}" class="btn btn-primary">Delete</a>
+        </div>
+      </li>
+      {%endfor%}
 
-<!-- Sidebar with image -->
-<nav class="w3-sidebar w3-hide-medium w3-hide-small" style="width:40%">
-  <div class="bgimg"></div>
-</nav>
-
-<!-- Hidden Sidebar (reveals when clicked on menu icon)-->
-<nav class="w3-sidebar w3-black w3-animate-right w3-xxlarge" style="display:none;padding-top:150px;right:0;z-index:2" id="mySidebar">
-  <a href="javascript:void(0)" onclick="closeNav()" class="w3-button w3-black w3-xxxlarge w3-display-topright" style="padding:0 12px;">
-    <i class="fa fa-remove"></i>
-  </a>
-  <div class="w3-bar-block w3-center">
-    <a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black" onclick="closeNav()">Home</a>
-    <a href="{% url "index" %}" class="w3-bar-item w3-button w3-text-grey w3-hover-black" onclick="closeNav()">Dashboard</a>
-    <a href="{% url "logout" %}" class="w3-bar-item w3-button w3-text-grey w3-hover-black" onclick="closeNav()">Deconnecter</a>
+    </ul>
   </div>
-</nav>
-
-<!-- Page Content -->
-<div class="w3-main w3-padding-large" style="margin-left:40%">
-
-  <!-- Menu icon to open sidebar -->
-  <span class="w3-button w3-top w3-white w3-xxlarge w3-text-grey w3-hover-text-black" style="width:auto;right:0;" onclick="openNav()"><i class="fa fa-bars"></i></span>
-
-  <!-- Header -->
-  <header class="w3-container w3-center" style="padding:128px 16px" id="home">
-    <h1 class="w3-jumbo"><b>{{request.user.username}}</b></h1>
-    <p>{{request.user.email}}.</p>
-    <img src="/w3images/profile_girl.jpg" class="w3-image w3-hide-large w3-hide-small w3-round" style="display:block;width:60%;margin:auto;">
-    <img src="/w3images/profile_girl.jpg" class="w3-image w3-hide-large w3-hide-medium w3-round" width="1000" height="1333">
-    <a href="{% url "famille_create" %}">
-        <button class="w3-button w3-light-grey w3-padding-large w3-margin-top">
-      <i class="fa fa-plus"></i> Ajouter Famille
-    </button>
-</a>
-  </header>
-
-  <!-- Portfolio Section -->
-  <div class="w3-padding-32 w3-content" id="portfolio">
-    <h2 class="w3-text-grey">Mets ton cœur dans tout ce que tu fais.     </h2>
-    <hr class="w3-opacity">
-
-    <!-- Grid for photos -->
-    <div class="w3-row-padding" style="margin:0 -16px">
-    <div class="w3-half">
-        <img src="{% static 'images/famille1.jpg' %}" style="width:100%">
-        <img src="{% static 'images/large-_0025_E_SupportsAndResources.jpg'%}" style="width:100%">
-        <img src="{% static 'images/famille3jpg.jpg' %}" style="width:100%">        
-        <img src="{% static 'images/famille4.jpg' %}" style="width:100%">
-      </div> 
-
-      <div class="w3-half">
-        <img src="{% static 'images/famille2.jpg' %}" style="width:100%">
-            <img src="{% static 'images/helping-family.png' %}" style="width:100%">
-        <img src="{% static 'images/flat-lay-cute-family-concept-arrangement.jpg'%}" style="width:100%">
-        
-      </div>
-    <!-- End photo grid -->
-    </div>
-  <!-- End Portfolio Section -->
-  </div>
-
-  <!-- About Section -->
-  <div class="w3-content w3-justify w3-text-grey w3-padding-32" id="about">
-    <h2>Motivation</h2>
-    <hr class="w3-opacity">
-    <p>nous croyons fermement que l'acte d'aider les familles dans le besoin est un moyen puissant de bâtir des communautés plus fortes et de créer un monde meilleur pour tous. Notre application a été conçue avec cette vision à l'esprit, offrant une plateforme facile d'utilisation qui permet à chacun de contribuer à cette cause noble.
-        En apportant votre soutien aux familles vulnérables, vous contribuez à briser le cycle de la pauvreté et de la détresse. Vous offrez une lueur d'espoir à ceux qui traversent des moments difficiles, et vous avez un impact direct sur leur qualité de vie. De plus, l'aide que vous fournissez renforce le tissu social de notre société, en favorisant la solidarité et en montrant que nous nous soucions les uns des autres.
-    </p>
- 
-  <!-- Footer -->
-  <footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin:-24px">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  <!-- End footer -->
-  </footer>
   
-<!-- END PAGE CONTENT -->
-</div>
-
-<script>
-// Open and close sidebar
-function openNav() {
-  document.getElementById("mySidebar").style.width = "60%";
-  document.getElementById("mySidebar").style.display = "block";
-}
-
-function closeNav() {
-  document.getElementById("mySidebar").style.display = "none";
-}
-</script>
-
-</body>
-</html>
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/chart.js/chart.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>

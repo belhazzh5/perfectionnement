@@ -91,3 +91,8 @@ def register(request):
 
 def not_found(request):
     return render(request,'404.html')
+
+class FamillelistView(LoginRequiredMixin,ListView):
+    model = Famille
+    template_name = 'famille_list.html'
+    context_object_name = 'myFamily'
