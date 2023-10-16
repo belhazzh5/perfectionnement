@@ -76,8 +76,6 @@ class FamilleDeleteView(LoginRequiredMixin,DeleteView):
     template_name = 'famille_confirm_delete.html'
     success_url = reverse_lazy('famille_list')
 
-def dash(request):
-    return render(request,'famille_list.html')
 
 def register(request):
     if request.method == 'POST':
