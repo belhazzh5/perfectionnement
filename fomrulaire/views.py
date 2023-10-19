@@ -53,22 +53,12 @@ class FamilleCreateView(LoginRequiredMixin,CreateView):
     form_class = FamilleForm
     template_name = 'famille_form.html'
     success_url = reverse_lazy('famille_list')
-    def form_valid(self, form):
-        # Save the Famille object
-        response = super().form_valid(form)
-
-        # Create a log entry for the Create operation
-        FamilleLog.objects.create(
-            description=f'${self.object} is created with ${self.request.user}',
-            user=self.request.user,
-        )
-
 
 
 class FamilleUpdateView(LoginRequiredMixin,UpdateView):
     model = Famille
     form_class = FamilleForm
-    template_name = 'famille_form.html'
+    template_name = 'famille_form_update.html'
     success_url = reverse_lazy('famille_list')
 
 class FamilleDeleteView(LoginRequiredMixin,DeleteView):
@@ -83,7 +73,6 @@ def register(request):
         if form.is_valid():
             user = form.save()
             # Log the user in after registration
-            login(request, user)
             return redirect('index')  # Redirect to your desired page after registration
     else:
         form = CustomUserCreationForm()
@@ -96,3 +85,6 @@ class FamillelistView(LoginRequiredMixin,ListView):
     model = Famille
     template_name = 'famille_list.html'
     context_object_name = 'myFamily'
+
+def home(request):
+    return render(request,'index.html')

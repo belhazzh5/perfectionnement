@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if request.user.is_staff %}
+    <title>تغيير عائلة</title>
+<div class="container">
+    <h3>بلدية الدندان </h3>
+    <h3>لجنة العمل الاجتماعي</h3>
+    <form method="post">
+        {% if form.errors %}
+                    <!-- Display form-level errors -->
+                    <div class="alert alert-danger">
+                        {{form.errors}}
+                        {% endif %}
+                      </div>
+        {% csrf_token %}
+        <div class="avatar">
+            <div>
+                <label class="gros" for="{{ form.image.id_for_label }}">صورة شخصية :</label>
+                {{ form.image }}
+            </div>
+        </div>
+    <div class="titre">
+        <div>
+            <label class="gros" for="{{ form.creation_date.id_for_label }}">التاريخ:</label>
+            {{ form.creation_date }}
+        </div>
+        <div>
+            <label class="gros" for="{{ form.nb.id_for_label }}">بطاقة ارشادات عدد:</label>
+            {{ form.nb }}
+        </div>
+
+    </div>
+    <div class="nompre">
+        <span>الاسم و اللقب</span>
+        <div>
+            <label for="{{ form.nom.id_for_label }}">الاسم:</label>
+            {{ form.nom }}
+        </div>
+
+        <div>
+            <label for="{{ form.prenom.id_for_label }}">اللقب:</label>
+            {{ form.prenom }}
+        </div>
+    </div>
+    <div class="age">
+        <div>
+            <label for="{{ form.age.id_for_label }}">السن:</label>
+            {{ form.age }}
+        </div>
+        <div>
+            <label for="{{ form.date.id_for_label }}">تاريخ الولادة:</label>
+            {{ form.date }}
+        </div>
+    </div>
+        <div>
+            <label for="{{ form.adress.id_for_label }}">العنوان الشخصي:</label>
+            {{ form.adress }}
+        </div>
+        <div class="phone">
+            <span>رقم او أرقام الهاتف  </span>
+        <div>
+            <label for="{{ form.phone1.id_for_label }}">رقم الهاتف 1:</label>
+            {{ form.phone1 }}
+        </div>
+
+        <div>
+            <label for="{{ form.phone2.id_for_label }}">رقم الهاتف 2:</label>
+            {{ form.phone2 }}
+        </div>
+
+        <div>
+        </div>
+            <label for="{{ form.etat_civil.id_for_label }}">الحالة المدنية :</label>
+            {{ form.etat_civil }}
+        </div>
+
+        <div>
+            <label for="{{ form.etat_santé.id_for_label }}">الحالة الصحية:</label>
+            {{ form.etat_santé }}
+        </div>
+
+<div class="childrens">
+    <span>عدد الاطفال في الكفالة</span>
+        <div>
+            <label for="{{ form.nb_enfants_scolaire.id_for_label }}">عدد الذين يزاولون الدراسة :</label>
+            {{ form.nb_enfants_scolaire }}
+        </div>
+
+        <div>
+            <label for="{{ form.nb_enfants_chomeur.id_for_label }}">عدد العاطلين عن العمل :</label>
+            {{ form.nb_enfants_chomeur }}
+        </div>
+
+        <div>
+            <label for="{{ form.nb_enfants_handicapés.id_for_label }}">عدد المعوقون او الذين لديهم مرض مزمن:</label>
+            {{ form.nb_enfants_handicapés }}
+        </div>
+
+        <div>
+            <label for="{{ form.nb_enfants_totales.id_for_label }}">المجموع:</label>
+            {{ form.nb_enfants_totales }}
+        </div>
+    </div>
+
+        <div>
+            <label for="{{ form.comme_familles.id_for_label }}">الوالدين او الاصول في الكفالة:</label>
+            {{ form.comme_familles }}
+        </div>
+
+        <div>
+            <label for="{{ form.revenu_total.id_for_label }}">المداخيل القارة:</label>
+            {{ form.revenu_total }}
+        </div>
+        <div>
+            <label for="{{ form.local.id_for_label }}">رجه استغلال المسكن :</label>
+            {{ form.local }}
+        </div>
+
+        <div>
+            <label for="{{ form.etat_local.id_for_label }}">الحالة التي عليها المسكن :</label>
+            {{ form.etat_local }}
+        </div>
+
+        <div>
+            <label for="{{ form.evaluation.id_for_label }}">تقييم:</label>
+            {{ form.evaluation }}
+        </div>
+
+        <input type="submit" value="تغيير">
+    </form>
+    <a href="{% url 'famille_list' %}">Back to Famille List</a>
+</div>
+{% else %}
+<h1>admin seulement peuvent acceder a cette page !<h1/>
+{% endif %}
+    {% endblock content %}

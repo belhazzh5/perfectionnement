@@ -1,7 +1,62 @@
 {% extends "fomrulaire/dash.html" %}
 {% block content %}
 {% load static %}
-  <main id="main" class="main">
+<style>
+  .container-parent {
+    display: grid;
+    grid-template-columns: 30% 70%; /* 80% for the first child, 20% for the second child */
+    grid-gap: 10px; /* Adjust the gap between the child divs as per your preference */
+    height: 200px; /* Set the height as per your requirement */
+    }
+</style>
+<div class="container-parent">
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+      <div class="col-auto" style="background-color: rgb(0 0 0 / 4%);margin-top:30px">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+              <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                  <span class="fs-5 d-none d-sm-inline">Menu</span>
+              </a>
+              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                  <li class="nav-item">
+                      <a href="{% url "home" %}" class="nav-link align-middle px-0">
+                          <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Acceuil</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
+                  </li>
+                  <li>
+                    <a href="{% url "famille_list" %}" class="nav-link px-0 align-middle">
+                        <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Lister Familles</span></a>
+                </li>                  <li>
+                  <a href="{% url "famille_create" %}" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Creation Famille</span></a>
+              </li>
+                  <li>
+                      <a href="http://127.0.0.1:8000/admin/auth/user/" class="nav-link px-0 align-middle">
+                          <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Gestion Des Utilisateurs</span> </a>
+                  </li>
+                  <li>
+                    <a href="{% url "register" %}" class="nav-link px-0 align-middle">
+                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Creation Utilisateur</span> </a>
+                </li>
+                {% if request.user.username %}
+                <li>
+                  <a href="{% url "logout" %}" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Deconnecter</span> </a>
+              </li>
+                {% endif %}
+              </ul>
+              <hr>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+  <main id="main" class="main" style="margin-left:30px">
 
     <div class="pagetitle">
       <h1>Dashboard</h1>
@@ -318,7 +373,6 @@
     </section>
 
   </main><!-- End #main -->
-
-</html>
+</div>
 
 {% endblock content %}

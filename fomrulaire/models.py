@@ -31,17 +31,18 @@ class Famille(models.Model):
     ETAT_LOCAL = (("a","مكتمل البناء "),("b","مكتمل البناء") )
     GENRES_CHOICES = (("a","مصاريف علاج"),("b","مصاريف دراسة ") , ("c","خلاص الماء ") , ("d","كهرباء "), ("e","معلوم الكراء"))
     GRADE = (("a","راتب الشهري "),("b","منحة") )
-    nom = models.CharField(max_length=70)
-    prenom = models.CharField(max_length=70)
+    nom = models.CharField(max_length=70,null=True,blank=True)
+    prenom = models.CharField(max_length=70,null=True,blank=True)
     date = models.DateField()
-    adress = models.CharField(max_length=70)
-    phone1 = models.CharField(max_length=8,validators=[is_number])
+    adress = models.CharField(max_length=70,null=True,blank=True)
+    phone1 = models.CharField(max_length=8,validators=[is_number],null=True,blank=True)
     phone2 = models.CharField(max_length=8,validators=[is_number],blank=True, null=True)
     etat_civil = models.CharField(
         max_length=1,
         choices=CIVIL,
         blank=True,
         default='a',
+        null=True
     )
     etat_santé = models.CharField(
         max_length=1,
@@ -65,7 +66,7 @@ class Famille(models.Model):
         blank=True,
         default='a',
     )
-    couverture_social = models.TextField(max_length=1,choices=[("y","yes"),("n","no")])
+    couverture_social = models.TextField(max_length=1,choices=[("y","نعم"),("n","لا")],null=True,blank=True)
 
     couverture_social_liste = models.CharField(
         max_length=1,
@@ -86,7 +87,7 @@ class Famille(models.Model):
         default='a',
     )
 
-    depense = models.CharField(choices=GENRES_CHOICES,max_length=5)
+    depense = models.CharField(choices=GENRES_CHOICES,max_length=5,null=True,blank=True)
     evaluation = models.TextField(choices=GRADE,max_length=1,default="a")
 
     def __str__(self):

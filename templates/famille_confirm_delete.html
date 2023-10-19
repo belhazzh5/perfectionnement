@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-
+{% if request.user.is_staff %}
     <title>Confirm Delete</title>
 
     <h1>Confirm Delete</h1>
@@ -10,4 +10,7 @@
         <input type="submit" value="Yes, Delete">
     </form>
     <a href="{% url 'famille_list' %}">Cancel</a>
+    {% else %}
+    <h1>vous n'etes pas accees pour supprimer {{famille.nom}} Famille</h1>
+    {% endif %}
     {% endblock content %}
