@@ -1,378 +1,273 @@
 {% extends "fomrulaire/dash.html" %}
 {% block content %}
 {% load static %}
-<style>
-  .container-parent {
-    display: grid;
-    grid-template-columns: 30% 70%; /* 80% for the first child, 20% for the second child */
-    grid-gap: 10px; /* Adjust the gap between the child divs as per your preference */
-    height: 200px; /* Set the height as per your requirement */
-    }
-</style>
-<div class="container-parent">
-<div class="container-fluid">
-  <div class="row flex-nowrap">
-      <div class="col-auto" style="background-color: rgb(0 0 0 / 4%);margin-top:30px">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-              <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                  <span class="fs-5 d-none d-sm-inline">Menu</span>
-              </a>
-              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                  <li class="nav-item">
-                      <a href="{% url "home" %}" class="nav-link align-middle px-0">
-                          <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Acceuil</span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                  </li>
-                  <li>
-                    <a href="{% url "famille_list" %}" class="nav-link px-0 align-middle">
-                        <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Lister Familles</span></a>
-                </li>                  <li>
-                  <a href="{% url "famille_create" %}" class="nav-link px-0 align-middle">
-                      <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Creation Famille</span></a>
-              </li>
-                  <li>
-                      <a href="http://127.0.0.1:8000/admin/auth/user/" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Gestion Des Utilisateurs</span> </a>
-                  </li>
-                  <li>
-                    <a href="{% url "register" %}" class="nav-link px-0 align-middle">
-                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Creation Utilisateur</span> </a>
-                </li>
-                {% if request.user.username %}
-                <li>
-                  <a href="{% url "logout" %}" class="nav-link px-0 align-middle">
-                      <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Deconnecter</span> </a>
-              </li>
-                {% endif %}
-              </ul>
-              <hr>
-          </div>
+
+<div class="container-fluid position-relative d-flex p-0">
+  <!-- Spinner Start -->
+  <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="sr-only">Loading...</span>
       </div>
   </div>
-</div>
+  <!-- Spinner End -->
 
 
-  <main id="main" class="main" style="margin-left:30px">
-
-    <div class="pagetitle">
-      <h1>Dashboard</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-
-    <section class="section dashboard">
-      <div class="row">
-
-        <!-- Left side columns -->
-        <div class="col-lg-8">
-          <div class="row">
-
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">Par Mois</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Famille <span>| Total</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>{{total_families}}</h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1"></span>
-
-                    </div>
-                  </div>
-                </div>
-
+  <!-- Sidebar Start -->
+  <div class="sidebar pe-4 pb-3">
+      <nav class="navbar bg-secondary navbar-dark">
+          <a href="{% url "index" %}" class="navbar-brand mx-4 mb-3">
+              <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+          </a>
+          <div class="d-flex align-items-center ms-4 mb-4">
+              <div class="position-relative">
+                  <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                  <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
               </div>
-            </div><!-- End Sales Card -->
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card revenue-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Revenu <span>| Par Mois</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>350DT</h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">Moyenne</span>
-
-                    </div>
-                  </div>
-                </div>
-
+              <div class="ms-3">
+                  <h6 class="mb-0">{{request.user.username}}</h6>
+                  <span>Admin</span>
               </div>
-            </div><!-- End Revenue Card -->
-
-            <!-- Customers Card -->
-            <div class="col-xxl-4 col-xl-12">
-
-              <div class="card info-card customers-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Nombre Enfants <span>| </span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>{{enfants}}</h6>
-                      <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">Moyenne</span>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div><!-- End Customers Card -->
-
-            <!-- Reports -->
-            <div class="col-12">
-              <div class="card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Rapport <span>| Mois</span></h5>
-
-                  <!-- Line Chart -->
-                  <div id="reportsChart"></div>
-
-                  <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                      new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'عدد الذين يزاولون الدراسة',
-                          data: [33, 11, 3, 8, 19, 4, 15],
-                        }, {
-                          name: 'عدد العاطلين عن العمل',
-                          data: {{nb_enfants_chomeur}}
-                        }, {
-                          name: 'عدد المعوقون او الذين لديهم مرض مزمن',
-                          data: [15, 11, 32, 18, 9, 24, 11]
-                        }],
-                        chart: {
-                          height: 350,
-                          type: 'area',
-                          toolbar: {
-                            show: false
-                          },
-                        },
-                        markers: {
-                          size: 4
-                        },
-                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                        fill: {
-                          type: "gradient",
-                          gradient: {
-                            shadeIntensity: 1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.4,
-                            stops: [0, 90, 100]
-                          }
-                        },
-                        dataLabels: {
-                          enabled: false
-                        },
-                        stroke: {
-                          curve: 'smooth',
-                          width: 2
-                        },
-                        xaxis: {
-                          type: 'datetime',
-                          categories: ["300", "350", "400", "450", "450", "500", "550"]
-                        },
-                        tooltip: {
-                          x: {
-                            format: 'dd/MM/yy HH:mm'
-                          },
-                        }
-                      }).render();
-                    });
-                  </script>
-                  <!-- End Line Chart -->
-
-                </div>
-
-              </div>
-            </div><!-- End Reports -->
+          </div>
+          <div class="navbar-nav w-100">
+              <a href="{% url "index" %}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+              <a href="{% url "famille_create" %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Creation Famille</a>
 
           </div>
-        </div><!-- End Left side columns -->
+      </nav>
+  </div>
+  <!-- Sidebar End -->
 
-        <!-- Right side columns -->
-        <div class="col-lg-4">
 
-          <!-- Recent Activity -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
+  <!-- Content Start -->
+  <div class="content">
+      <!-- Navbar Start -->
+      <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+          <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+              <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+          </a>
+          <a href="#" class="sidebar-toggler flex-shrink-0">
+              <i class="fa fa-bars"></i>
+          </a>
+          <form class="d-none d-md-flex ms-4">
+              <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+          </form>
+          <div class="navbar-nav align-items-center ms-auto">
+              <div class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="fa fa-envelope me-lg-2"></i>
+                      <span class="d-none d-lg-inline-flex">Message</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                      <a href="#" class="dropdown-item">
+                          <div class="d-flex align-items-center">
+                              <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                              <div class="ms-2">
+                                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                  <small>15 minutes ago</small>
+                              </div>
+                          </div>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item">
+                          <div class="d-flex align-items-center">
+                              <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                              <div class="ms-2">
+                                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                  <small>15 minutes ago</small>
+                              </div>
+                          </div>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item">
+                          <div class="d-flex align-items-center">
+                              <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                              <div class="ms-2">
+                                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                  <small>15 minutes ago</small>
+                              </div>
+                          </div>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item text-center">See all message</a>
+                  </div>
+              </div>
+              <div class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="fa fa-bell me-lg-2"></i>
+                      <span class="d-none d-lg-inline-flex">Notificatin</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                      <a href="#" class="dropdown-item">
+                          <h6 class="fw-normal mb-0">Profile updated</h6>
+                          <small>15 minutes ago</small>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item">
+                          <h6 class="fw-normal mb-0">New user added</h6>
+                          <small>15 minutes ago</small>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item">
+                          <h6 class="fw-normal mb-0">Password changed</h6>
+                          <small>15 minutes ago</small>
+                      </a>
+                      <hr class="dropdown-divider">
+                      <a href="#" class="dropdown-item text-center">See all notifications</a>
+                  </div>
+              </div>
+              <div class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                      <img class="rounded-circle me-lg-2" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                      <span class="d-none d-lg-inline-flex">{{request.user.username}}</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                      <a href="#" class="dropdown-item">My Profile</a>
+                      <a href="#" class="dropdown-item">Settings</a>
+                      <a href="#" class="dropdown-item">Log Out</a>
+                  </div>
+              </div>
+          </div>
+      </nav>
+      <!-- Navbar End -->
 
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
 
-            <div class="card-body">
-              <h5 class="card-title">Kitchen for women</h5>
-          </div><!-- End Recent Activity -->
-
-          <!-- Website Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">depense <span>|Month</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                          value: 200,
-                          name: 'معلوم الكراء'
-                        },
-                        {
-                          value: 50,
-                          name: 'كهرباء'
-                        },
-                        {
-                          value: 20,
-                          name: 'خلاص الماء'
-                        },
-                        {
-                          value: 200,
-                          name: 'مصاريف دراسة'
-                        },
-                        {
-                          value: 150,
-                          name: 'مصاريف علاج'
-                        }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div><!-- End Website Traffic -->
-
-        </div><!-- End Right side columns -->
-
+      <!-- Sale & Revenue Start -->
+      <div class="container-fluid pt-4 px-4">
+          <div class="row g-4">
+              <div class="col-sm-6 col-xl-3">
+                  <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                      <i class="fa fa-chart-line fa-3x text-primary"></i>
+                      <div class="ms-3">
+                          <p class="mb-2">Today Sale</p>
+                          <h6 class="mb-0">$1234</h6>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                      <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                      <div class="ms-3">
+                          <p class="mb-2">Total Sale</p>
+                          <h6 class="mb-0">$1234</h6>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                      <i class="fa fa-chart-area fa-3x text-primary"></i>
+                      <div class="ms-3">
+                          <p class="mb-2">Today Revenue</p>
+                          <h6 class="mb-0">$1234</h6>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                      <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                      <div class="ms-3">
+                          <p class="mb-2">Total Revenue</p>
+                          <h6 class="mb-0">$1234</h6>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </section>
+      <!-- Sale & Revenue End -->
 
-  </main><!-- End #main -->
+
+      <!-- Sales Chart Start -->
+      <div class="container-fluid pt-4 px-4">
+          <div class="row g-4">
+              <div class="col-sm-12 col-xl-6">
+                  <div class="bg-secondary text-center rounded p-4">
+                      <div class="d-flex align-items-center justify-content-between mb-4">
+                          <h6 class="mb-0">Worldwide Sales</h6>
+                          <a href="">Show All</a>
+                      </div>
+                      <canvas id="worldwide-sales"></canvas>
+                  </div>
+              </div>
+              <div class="col-sm-12 col-xl-6">
+                  <div class="bg-secondary text-center rounded p-4">
+                      <div class="d-flex align-items-center justify-content-between mb-4">
+                          <h6 class="mb-0">Salse & Revenue</h6>
+                          <a href="">Show All</a>
+                      </div>
+                      <canvas id="salse-revenue"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Sales Chart End -->
+
+
+      <!-- Recent Sales Start -->
+      <div class="container-fluid pt-4 px-4">
+          <div class="bg-secondary text-center rounded p-4">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                  <h6 class="mb-0">Recent Salse</h6>
+                  <a href="">Show All</a>
+              </div>
+              <div class="table-responsive">
+                  <table class="table text-start align-middle table-bordered table-hover mb-0">
+                      <thead>
+                          <tr class="text-white">
+                              <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Invoice</th>
+                              <th scope="col">Customer</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Action</th>
+                          </tr>
+                      </thead>
+                      {% if families %}
+                      <tbody>
+                        {% for famille in families %}
+                          <tr>
+                              <td><input class="form-check-input" type="checkbox"></td>
+                              <td>{{famille.creation_date}}</td>
+                              <td>{{famille.nom}}</td>
+                              <td>{{famille.etat_civil}}</td>
+                              <td>{{famille.evaluation}}</td>
+                              <td>{{famaille.nb_enfants_totales}}</td>
+                              <div class="btn">
+                                <td><a class="btn btn-sm btn-primary" href="{% url "famille_update" famille.pk %}">Update</a></td>
+                                <td><a class="btn btn-sm btn-primary" href="{% url "famille_delete" famille.pk %}">Delete</a></td>
+                              </div>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                      {% endif %}
+                  </table>
+              </div>
+          </div>
+      </div>
+      <!-- Recent Sales End -->
+
+
+      <!-- Footer Start -->
+      <div class="container-fluid pt-4 px-4">
+          <div class="bg-secondary rounded-top p-4">
+              <div class="row">
+                  <div class="col-12 col-sm-6 text-center text-sm-start">
+                      &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
+                  </div>
+                  <div class="col-12 col-sm-6 text-center text-sm-end">
+                      <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                      Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                      <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Footer End -->
+  </div>
+  <!-- Content End -->
+
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 {% endblock content %}
