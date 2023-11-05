@@ -86,5 +86,3 @@ class FamillelistView(LoginRequiredMixin,ListView):
     template_name = 'famille_list.html'
     context_object_name = 'myFamily'
 
-def home(request):
-    return render(request,'index.html')
